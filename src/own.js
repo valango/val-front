@@ -38,6 +38,7 @@ export function ownOff (event, method = '$off') {
 export function ownOn (event, handler, emitter, method = '$on') {
   assert(this.$_Own_handlers[event] === undefined, 'ownOn: DUP ' + event)
   const h = typeof handler === 'function' ? handler : this[handler]
+  assert(h, `onOwn(${event}, ${handler}): no handler`)
   const f = (...args) => h.apply(this, args)
   emitter[method](event, f)
   this.$_Own_handlers[event] = [f, emitter]
