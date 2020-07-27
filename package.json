@@ -1,0 +1,58 @@
+{
+  "name": "val-front",
+  "version": "1.0.0",
+  "description": "Simple front-end helpers",
+  "main": "index.js",
+  "keywords": [
+    "private",
+    "front-end"
+  ],
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/valango/val-front.git"
+  },
+  "files": [
+    "src/**/*.js"
+  ],
+  "scripts": {
+    "clean": "rimraf reports",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "lint": "eslint --ext .js src",
+    "purge": "rimraf node_modules reports",
+    "test": "nyc mocha 'test/**/*spec.js' --require esm"
+  },
+  "nyc": {
+    "all": true,
+    "check-coverage": true,
+    "exclude": [
+      "src/index.js"
+    ],
+    "include": [
+      "src/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "report-dir": "./reports"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "chai": "^4.2.0",
+    "codecov": "^3.7.2",
+    "debug": "^4.1.1",
+    "eslint": "^7.5.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "esm": "^3.2.25",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "rimraf": "^3.0.2"
+  }
+}
