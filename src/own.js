@@ -61,7 +61,7 @@ export function dispose () {
   }
 }
 
-export default class Own {
+export class Own {
   constructor (className) {
     assert(className, 'Own.CTR: missing className')
     this.ownInitialize(className)
