@@ -1,6 +1,3 @@
-//  lib/debug/index.js
-//  @version 1.2.0
-//  NB: this file is meant to be used via require(), not import.
 'use strict'
 
 let api

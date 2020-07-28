@@ -1,5 +1,3 @@
-//  lib/format
-
 /**
  * Super-simple print function.
  *

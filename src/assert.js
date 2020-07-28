@@ -1,8 +1,3 @@
-/**
- * src/lib/assert.js
- * @version 1.0.2
- */
-
 let cb
 
 const assert = process.env.NODE_ENV !== 'production'

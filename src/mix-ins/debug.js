@@ -1,7 +1,3 @@
-/*
- * src/components/debug.js
- */
-
 import Debug from '../debug'
 import nameOf from '../vueName'
 

@@ -1,7 +1,3 @@
-/**
- * @module lib/own
- * @version 1.0.0
- */
 import assert from './assert'
 
 let seed = 0
@@ -13,9 +9,8 @@ let seed = 0
 export function ownInitialize (className) {
   this.$own = Object.create(null)
   this.$_Own_handlers = Object.create(null)
-  this.$_Own_class = className
+  this.$_Own_class = className || (this.constructor ? this.constructor.name : 'Object-')
   this.$_Own_id = ++seed
-  console.log('*******', className, this.constructor ? this.constructor.name : 'NOCLASS')
 }
 
 /**

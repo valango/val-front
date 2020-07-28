@@ -1,9 +1,3 @@
-/**
- * @module Dir/index
- * @version 1.0.0
- */
-'use strict'
-
 export { default as assert } from './assert'
 export { default as debug } from './debug'
 export { default as debugMixin } from './mix-ins/debug'

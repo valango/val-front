@@ -1,7 +1,3 @@
-/**
- * @module src/nameOf
- * @version 1.0.0
- */
 //  See: https://github.com/vuejs/Discussion/issues/7
 
 /**

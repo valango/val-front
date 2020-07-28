@@ -8,7 +8,7 @@ const _ = require('lodash')
 // const target = p.debug
 // const target = require('../src').debug
 
-describe('index', () => {
+describe('debug', () => {
   it('should ?', () => {
     const debug = target('TEST', true)
     debug('uraa')

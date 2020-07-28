@@ -1,10 +1,4 @@
-/**
- * lib/debug/debug.js
- * @version 1.2.0
- */
-'use strict'
-
-const debug = require('debug')
+import debug from 'debug'
 
 //  Todo: re-think the masking.
 const _mask = process.env.DEBUG
@@ -31,4 +25,4 @@ Object.defineProperty(factory, 'enabled', {
   }
 })
 
-module.exports = factory
+export default factory

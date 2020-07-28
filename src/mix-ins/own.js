@@ -1,9 +1,3 @@
-/**
- * src/lib/mix-ins/own.js
- *
- * Manage private variables and clean those up (hopefully).
- *
- */
 import { dispose, ownInitialize, ownOn, ownOff } from '../own'
 import vueName from '../vueName'
 
