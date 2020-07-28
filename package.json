@@ -1,6 +1,6 @@
 {
   "name": "val-front",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Simple front-end helpers",
   "main": "src/index.js",
   "keywords": [

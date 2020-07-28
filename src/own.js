@@ -11,7 +11,7 @@ export function ownInitialize (className) {
   this.$_Own_handlers = Object.create(null)
   this.ownClass = className || (this.constructor ? this.constructor.name : 'Object-')
   this.ownId = ++seed
-  this.ownName = this.ownClass + '_' + seed
+  this.ownName = this.ownClass + '#' + seed
 }
 
 /**
