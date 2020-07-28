@@ -8,13 +8,14 @@ let seed = 0
 
 /**
  * Initialize the machinery.
- * @param {string} className
+ * @param {string=} className for cases when
  */
 export function ownInitialize (className) {
   this.$own = Object.create(null)
   this.$_Own_handlers = Object.create(null)
   this.$_Own_class = className
   this.$_Own_id = ++seed
+  console.log('*******', className, this.constructor ? this.constructor.name : 'NOCLASS')
 }
 
 /**
