@@ -59,11 +59,12 @@ export function dispose () {
   }
 }
 
-export class Own {
-  constructor (className) {
-    assert(className, 'Own.CTR: missing className')
-    this.ownInitialize(className)
-  }
+/**
+ * @param {string=} className
+ * @constructor
+ */
+export function Own (className) {
+  this.ownInitialize(className)
 }
 
 Own.prototype.dispose = dispose
