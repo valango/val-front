@@ -9,8 +9,9 @@ let seed = 0
 export function ownInitialize (className) {
   this.$own = Object.create(null)
   this.$_Own_handlers = Object.create(null)
-  this.$_Own_class = className || (this.constructor ? this.constructor.name : 'Object-')
-  this.$_Own_id = ++seed
+  this.ownClass = className || (this.constructor ? this.constructor.name : 'Object-')
+  this.ownId = ++seed
+  this.ownName = this.ownClass + '_' + seed
 }
 
 /**
@@ -62,18 +63,6 @@ export class Own {
   constructor (className) {
     assert(className, 'Own.CTR: missing className')
     this.ownInitialize(className)
-  }
-
-  get ownClass () {
-    return this.$_Own_class
-  }
-
-  get ownId () {
-    return this.$_Own_id
-  }
-
-  get ownName () {
-    return this.$_Own_class + '_' + this.$_Own_id
   }
 }
 

@@ -6,7 +6,7 @@ export default {
     //  Instance variable to control debugging.
     this.debugOn = true
 
-    this._debugFn = Debug(nameOf(this, true), true)
+    this._debugFn = Debug(this.ownName || nameOf(this, true), true)
   },
 
   methods: {
