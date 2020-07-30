@@ -1,4 +1,5 @@
 import assert from './assert'
+import Debug from './debug'
 
 let seed = 0
 
@@ -12,6 +13,12 @@ export function ownInitialize (className) {
   this.ownClass = className || (this.constructor ? this.constructor.name : 'Object-')
   this.ownId = ++seed
   this.ownName = this.ownClass + '#' + seed
+  this.debugOn = true
+  const debug = Debug(this.ownName, true)
+  this.debug = (...args) => {
+    if (!this.debugOn) return
+    debug.apply(undefined, args)
+  }
 }
 
 /**
@@ -67,6 +74,7 @@ export function Own (className) {
   this.ownInitialize(className)
 }
 
+Own.prototype.debug = () => undefined
 Own.prototype.dispose = dispose
 Own.prototype.ownInitialize = ownInitialize
 Own.prototype.ownOn = ownOn
