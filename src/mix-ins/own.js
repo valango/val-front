@@ -1,10 +1,9 @@
-import { dispose, ownInitialize, ownOn, ownOff } from '../own'
+import { dispose, ownInitialize, ownOn, ownOff } from '../helpers'
 import vueName from '../vueName'
 
 export default {
   beforeCreate () {
-    //  NB: because methods are not set up yet, overloading the ownInitialize does not work.
-    //  Use separate beforeCreate() hook instead.
+    //  Override beforeCreate() hook or modify things in later lifecycle hooks.
     ownInitialize.call(this, vueName(this, true))
   },
 

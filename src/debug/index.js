@@ -6,11 +6,10 @@ if (process.env.NODE_ENV !== 'production') {
   api = require('./debug')
 } else {
   //  eslint-disable-next-line
-  const debug = (...p) => undefined
+  const noop = (...p) => undefined
   //  eslint-disable-next-line
-  api = (...p) => debug
+  api = (...p) => noop
+  api.checkProperties = noop
 }
-
-api.factory = api
 
 module.exports = api

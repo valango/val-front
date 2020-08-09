@@ -1,35 +1,59 @@
+//  src/helpers.js -  helper functions for class and mix-in.
 import assert from './assert'
 import Debug from './debug'
 
 let seed = 0
 
+const defProp = (self, name) => {
+  const key = '$_Own_' + name
+  Object.defineProperty(self, name, {
+    enumerable: true,
+    get: () => self[key],
+    set: (v) => {
+      self[key] = v
+      Debug.checkProperties(self)
+    }
+  })
+}
+
 /**
  * Initialize the machinery.
  * @param {string=} className for cases when
  */
-export function ownInitialize (className) {
-  this.$own = Object.create(null)
+export function ownInitialize (className = undefined) {
+  /** @type {function(...)}   - will be mutated via debugOn and ownName. */
+  this.debug = () => undefined
+  /** @type {boolean} debugOn - controls if debug output is enabled. */
+  defProp(this, 'debugOn')
+  /** @type {string} ownName - mutating this property affects debug output. */
+  defProp(this, 'ownName')
+  /** @type {Object} own - a keyed collection of subordinate object instances */
+  this.own = Object.create(null)
+  /** @type {string} ownClass - class instance or Vue.js component name. */
+  this.ownClass = className || (this.constructor ? this.constructor.name : 'object')
+  /** @type {number} ownNumber is an unique numeric instance id. */
+  this.ownNumber = ++seed
+  /** @private */
   this.$_Own_handlers = Object.create(null)
-  this.ownClass = className || (this.constructor ? this.constructor.name : 'Object-')
-  this.ownId = ++seed
-  this.ownName = this.ownClass + '#' + seed
-  this.debugOn = true
-  const debug = Debug(this.ownName, true)
-  this.debug = (...args) => {
-    if (!this.debugOn) return
-    debug.apply(undefined, args)
-  }
+  /** @private */
+  this.$_Own_ownName = this.ownClass + '#' + this.ownNumber
+  /** @private */
+  this.$_Own_debugOn = undefined
+
+  Debug.checkProperties(this)
 }
 
 /**
  * Unregister event handler.
  * @param {string} event
  * @param {string=} method for turning events off.
+ * @returns {this}
  */
 export function ownOff (event, method = '$off') {
   const [handler, instance] = this.$_Own_handlers[event]
   instance[method](event, handler)
   delete this.$_Own_handlers[event]
+  return this
 }
 
 /**
@@ -38,6 +62,7 @@ export function ownOff (event, method = '$off') {
  * @param {string|function} handler or instance method name.
  * @param {Object} emitter
  * @param {string=} method for turning events on.
+ * @returns {this}
  */
 export function ownOn (event, handler, emitter, method = '$on') {
   assert(this.$_Own_handlers[event] === undefined, 'ownOn: DUP ' + event)
@@ -46,36 +71,23 @@ export function ownOn (event, handler, emitter, method = '$on') {
   const f = (...args) => h.apply(this, args)
   emitter[method](event, f)
   this.$_Own_handlers[event] = [f, emitter]
+  return this
 }
 
 /**
  * Method to be called before the instance is destroyed.
  */
 export function dispose () {
-  for (const key of Object.keys(this.$own)) {
-    const value = this.$own[key]
+  for (const key of Object.keys(this.own)) {
+    const value = this.own[key]
     if (value && typeof value === 'object' &&
       typeof value.dispose === 'function') {
       value.dispose()
     }
-    delete this.$own[key]
+    delete this.own[key]
   }
 
   for (const event of Object.keys(this.$_Own_handlers)) {
     this.ownOff(event)
   }
 }
-
-/**
- * @param {string=} className
- * @constructor
- */
-export function Own (className) {
-  this.ownInitialize(className)
-}
-
-Own.prototype.debug = () => undefined
-Own.prototype.dispose = dispose
-Own.prototype.ownInitialize = ownInitialize
-Own.prototype.ownOn = ownOn
-Own.prototype.ownOff = ownOff
