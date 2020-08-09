@@ -5,7 +5,7 @@
  * @param args
  * @returns {*}
  */
-export default (fmt, ...args) => {
+module.exports = (fmt, ...args) => {
   const n = args.length - 1
   let i = -1
 

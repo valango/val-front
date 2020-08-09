@@ -1,4 +1,6 @@
-import debug from 'debug'
+'use strict'
+
+const debug = require('debug')
 
 //  Todo: re-think the masking.
 const _mask = process.env.DEBUG
@@ -34,4 +36,4 @@ factory.checkProperties = (self) => {
   }
 }
 
-export default factory
+module.exports = factory

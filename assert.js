@@ -1,3 +1,5 @@
+'use strict'
+
 let cb
 
 const assert = process.env.NODE_ENV !== 'production'
@@ -19,4 +21,4 @@ assert.callback = (fn) => {
   return assert
 }
 
-export default assert
+module.exports = assert

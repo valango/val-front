@@ -45,7 +45,7 @@ methods will be just empty functions. Here are simple examples:
 
 **Debugging class instances:**
 ```javascript
-  import { Own } from 'val-front'
+  import Own from 'val-front/Own'
 
   class A extends Own {}
 
