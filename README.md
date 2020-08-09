@@ -6,14 +6,17 @@ Simple code snippets for making front-end coding more fun.
 ```
 $ npm i -S https://github.com/valango/val-front
 ```
-The package in intended for using with ES5+ source code. It has named exports:
+The package in intended for using with ES5+ source code. It has the following parts:
 
-* assert
-* debug
-* format
-* Own
-* ownMixin
-* vueName
+* [assert](#assertions)
+* [debug](#debugging)
+* [format](#format-function)
+* [mixin](#vuejs-mixin)
+* [Own](#own-baseclass)
+* [vueName](#vuename-function)
+
+These parts can be loaded individually, like `import dbg from 'val-front/debug'`<br />
+or together, like `import {assert, mixin} frpm 'val-front'`
 
 ### Assertions
 ```javascript
@@ -35,7 +38,7 @@ methods will be just empty functions. Here are simple examples:
 
 **Debugging plain javascript code:**
 ```javascript
-  const debug = require('val-front').debug('main.js')
+  const debug = require('val-front/debug')('main.js')
 
   debug('try(%d, %o)', 1, 2, 3)  // main.js try(1, 2) +0ms 3
 ```
@@ -88,9 +91,8 @@ This baseclass provides API for safer code and some diagnostic support as well:
    
 Mutating `debugOn` or `className` property will re-generate `debug()` instance method.
 
-### ownMixin
+### Vue.js mixin
 This mix-in will provide a Vue.js component with _**`Own`**_ class API described above.
-
 
 ### format function
 `format( fmt, ...args ) : {string}`<br />

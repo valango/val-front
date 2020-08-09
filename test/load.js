@@ -10,7 +10,7 @@ const { join } = require('path')
 
 module.exports = (targetName = undefined, env = 'test') => {
   const names = 'dictionary index magic settings translator'.split(' ')
-  const src = join(process.cwd(), 'src')
+  const src = process.cwd()
 
   if (targetName) names.push(targetName)
 

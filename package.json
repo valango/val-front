@@ -2,7 +2,6 @@
   "name": "val-front",
   "version": "2.0.0",
   "description": "Simple front-end helpers",
-  "main": "src/index.js",
   "keywords": [
     "private",
     "front-end"
@@ -14,12 +13,12 @@
     "url": "git://github.com/valango/val-front.git"
   },
   "files": [
-    "src/**/*.js"
+    "[a-z]*.js", "debug"
   ],
   "scripts": {
     "clean": "rimraf reports",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "lint": "eslint --ext .js src",
+    "lint": "eslint --ext .js",
     "purge": "rimraf node_modules reports",
     "test": "nyc mocha 'test/**/*spec.js' --require esm"
   },

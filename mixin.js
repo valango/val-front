@@ -1,5 +1,5 @@
-import { dispose, ownInitialize, ownOn, ownOff } from '../helpers'
-import vueName from '../vueName'
+import { dispose, ownInitialize, ownOn, ownOff } from './helpers'
+import vueName from './vueName'
 
 export default {
   beforeCreate () {

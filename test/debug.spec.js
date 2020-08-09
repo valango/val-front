@@ -1,7 +1,7 @@
 'use strict'
 process.env.NODE_ENV = 'development'
 // import P from '../src'
-import { debug as target } from '../src'
+import target from '../debug'
 
 const { expect } = require('chai')
 const _ = require('lodash')
