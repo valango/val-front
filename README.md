@@ -53,8 +53,8 @@ methods will be just empty functions. Here are simple examples:
 ```
 
 **Debugging Vue.js components:**
-Just make sure your component has _**`ownMixin`**_ imported from 'val-front' and
-your component instance will have debug() method.
+Just make sure your component has _**`mixin`**_ imported from 'val-front' -
+your component instance will have `debug()` method.
 
 #### Fine control of debugging
 By default, call to debug() method will generate console output.
@@ -73,21 +73,23 @@ Tricks #2, #3 will override the effects of #1, #2.
 `constructor Own(className= : {string})`
 
 This baseclass provides API for safer code and some diagnostic support as well:
-   * `method debug(...)` - see [debugging](#debugging) for details.
-   * `method dispose()` - will free up all bound resources, when instance is destroyed.
+   * `method debug(...)  -` see [debugging](#debugging) for details.
+   * `method dispose()   -` call this to free up all bound resources.
    Base class method cleans the _**`own`**_ container, firing _`dispose`_ method of every
-   object instance found in there.
+   object instance having it. Then it un-registers all handlers set by _`ownOn`_ method.
    * `function ownOff (event : string, method = '$off') : this` -
-   cleans event handlers previously set by `ownOn()` method.
+   un-registers event handler previously set by `ownOn` method.
+   In most cases you don't need to call it explicitly, 
+   except for emitters not having _`$off`_ method.
    * `function ownOn (event : string, handler, emitter, method = '$on') : this` -
    registers _`event`_ _`handler`_ with _`emitter`_ object using _`method`_.
-   The _`handler`_ parameter can be handler function or instance method name.
-   * `property debugOn : {boolean|undefined}` - see [debugging](#debugging) for details.
-   * `property own : {Object}`
+   The _`handler`_ parameter can be instance method name or a function.
+   * `property debugOn : {boolean|undefined}  -` see [debugging](#debugging) for details.
+   * `property own : {Object}                 -`
    a keyed container for private data, that should be gracefully cleaned up.
-   * `property ownClass : {string}` - class name.
-   * `property ownNumber : {number}` - globally unique class instance number.
-   * `property ownName : {string}` - initially set to ownClass + '#' + ownNumber.
+   * `property ownClass : {string}   -` class name.
+   * `property ownNumber : {number}  -` globally unique class instance number.
+   * `property ownName : {string}    -` initially set to `ownClass + '#' + ownNumber`.
    
 Mutating `debugOn` or `className` property will re-generate `debug()` instance method.
 
