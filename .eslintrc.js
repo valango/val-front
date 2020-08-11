@@ -28,6 +28,7 @@ module.exports = {
   globals: {
     'ga': true, // Google Analytics
     'cordova': true,
+    'jest': true,
     '__statics': true,
     'process': true,
     'Capacitor': true,

@@ -1,5 +1,4 @@
 'use strict'
-
 const debug = require('debug')
 
 //  Todo: re-think the masking.

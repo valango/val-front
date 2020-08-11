@@ -7,6 +7,7 @@ let debug, enabled, nope, out
 
 const print = (...args) => out.push([enabled, ...args])
 const init = env => {
+  jest.resetModules()
   target = load('debug', env)
   out = []
   enabled = undefined
@@ -18,7 +19,7 @@ const init = env => {
 }
 
 
-xdescribe('debug', () => {
+describe('debug', () => {
   describe('development', () => {
     beforeAll(() => init('development'))
     it('should output', () => {
@@ -44,6 +45,7 @@ xdescribe('debug', () => {
   describe('production', () => {
     beforeAll(() => init('production'))
     it('should do nothing', () => {
+      // console.log(Object.keys(require.cache))
       const debug = target('TEST', true)
       expect(target.enabled).toBe(undefined)
       debug('uraa')

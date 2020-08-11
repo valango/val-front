@@ -23,7 +23,6 @@ class A extends Own {
 
 describe('Own', () => {
   it('should construct', () => {
-    console.log('BAA', typeof window)
     expect(new A('Aa').ownName).toBe('Aa#1')
     expect((a = new A()).ownName).toBe('A#2')
     expect(a.debugOn).toBe(undefined)

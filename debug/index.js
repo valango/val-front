@@ -1,5 +1,4 @@
 'use strict'
-
 let api
 
 if (process.env.NODE_ENV !== 'production') {
