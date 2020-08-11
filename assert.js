@@ -5,11 +5,11 @@ const env = process.env.NODE_ENV
 let cb
 
 exports = module.exports = (...args) => {
-  if (args[0]) return
+  if (args[0]) return args[0]
   if (cb) cb(args)
-  if (env === 'production') throw new Error('AssertionError')
   // eslint-disable-next-line
-  console.assert(...args)
+  if (env !== 'production') console.assert(...args)
+  throw new Error('AssertionError')
 }
 
 exports.callback = (fn) => {

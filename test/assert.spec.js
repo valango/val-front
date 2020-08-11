@@ -17,17 +17,17 @@ describe('assert', () => {
 
     it('should succeed', () => {
       expect(assert.callback()).to.equal(assert, 'callback()')
-      expect(assert(0, 'baa')).to.equal(undefined)
+      expect(assert(23, 'baa')).to.equal(23)
     })
 
     it('should fire callback', () => {
       expect(() => assert.callback(3)).to.throw('illegal')
-      assert.callback(cb)(0, 'a')
+      expect(() => assert.callback(cb)(0, 'a')).to.throw('AssertionError')
       expect(data).to.eql([0, 'a'], 'fail')
       data = undefined
       assert(1, 'B')
       expect(data).to.equal(undefined, 'success')
-      assert.callback()(0)
+      expect(() => assert.callback()(0, 55)).to.throw('AssertionError')
       expect(data).to.equal(undefined, 'nothing')
     })
   })
@@ -39,7 +39,7 @@ describe('assert', () => {
 
     it('should succeed', () => {
       expect(assert.callback(cb)).to.equal(assert, 'callback()')
-      expect(assert(1, 'baa')).to.equal(undefined)
+      expect(assert(11, 'baa')).to.equal(11)
     })
 
     it('should throw', () => {

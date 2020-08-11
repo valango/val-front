@@ -30,7 +30,10 @@ assert.callback((...args) => {
 
 assert( someCondition, ... )  // Optional extra arguments for console.assert() 
 ```
-In production mode, _`assert()`_ will throw an exception.
+On success, assert returns its first argument value.
+Otherwise, an exception with message 'AssertionError' is thrown after callback (if set).
+In non-production mode, `console.assert()` is called before throwing exception, so there
+will be some useful information on the console.
 
 ### Debugging
 Debugging machinery is based on [debug](https://github.com/visionmedia/debug])
