@@ -78,9 +78,9 @@ This baseclass provides API for safer code and some diagnostic support as well:
    * `method dispose()   -` call this to free up all bound resources.
    Base class method cleans the _**`own`**_ container, firing _`dispose`_ method of every
    object instance having it. Then it un-registers all handlers set by _`ownOn`_ method.
-   * `function ownOff (event : string) : this` -
-   un-registers event handler previously set by `ownOn` method.
-   In most cases you don't need to call it explicitly.
+   * `function ownOff (event= : string, emitter= : Object) : this` -
+   un-registers handlers registered for matching (event, emitter) pairs.
+   It is called by dispose(), so in most cases you don't need to call it explicitly.
    * `function ownOn (event : string, handler, emitter, api=) : this` -
    registers _`event`_ _`handler`_ with _`emitter`_ object.
    If emitter API differs from `addEventListener/removeEventListener` or `$on/$off`,

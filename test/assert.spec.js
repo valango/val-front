@@ -7,13 +7,13 @@ const load = require('./load')
 
 let data
 
-const cb = (...args) => (data = args)
+const cb = (args) => (data = args)
 
 describe('assert', () => {
   describe('normal mode', () => {
     let assert
 
-    before(() => (assert = load('assert').default))
+    before(() => (assert = load('assert')))
 
     it('should succeed', () => {
       expect(assert.callback()).to.equal(assert, 'callback()')
@@ -35,7 +35,7 @@ describe('assert', () => {
   describe('production mode', () => {
     let assert
 
-    before(() => (assert = load('assert', 'production').default))
+    before(() => (assert = load('assert', 'production')))
 
     it('should succeed', () => {
       expect(assert.callback(cb)).to.equal(assert, 'callback()')
@@ -44,8 +44,7 @@ describe('assert', () => {
 
     it('should throw', () => {
       expect(assert.callback(cb)).to.equal(assert, 'callback()')
-      expect(() => assert(0, 'YES')).to.throw('YES')
-      expect(() => assert()).to.throw('Assertion failed')
+      expect(() => assert()).to.throw('AssertionError')
     })
   })
 })

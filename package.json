@@ -1,6 +1,6 @@
 {
   "name": "val-front",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Simple front-end helpers",
   "keywords": [
     "private",
@@ -26,10 +26,10 @@
     "all": true,
     "check-coverage": true,
     "exclude": [
-      "src/index.js"
+      "index.js"
     ],
     "include": [
-      "src/**/*.js"
+      "[a-zO]*.js", "debug"
     ],
     "reporter": [
       "lcov",

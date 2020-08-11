@@ -1,6 +1,7 @@
 //  src/helpers.js -  helper functions for class and mix-in.
-import assert from './assert'
-import Debug from './debug'
+'use strict'
+const assert = require('./assert')
+const Debug = require('./debug')
 
 let seed = 0
 
@@ -20,7 +21,7 @@ const defProp = (self, name) => {
  * Initialize the machinery.
  * @param {string=} className for cases when
  */
-export function ownInitialize (className = undefined) {
+function ownInitialize (className = undefined) {
   /** @type {function(...)}   - will be mutated via debugOn and ownName. */
   this.debug = () => undefined
   /** @type {boolean} debugOn - controls if debug output is enabled. */
@@ -34,7 +35,7 @@ export function ownInitialize (className = undefined) {
   /** @type {number} ownNumber is an unique numeric instance id. */
   this.ownNumber = ++seed
   /** @private */
-  this.$_Own_handlers = Object.create(null)
+  this.$_Own_handlers = []
   /** @private */
   this.$_Own_ownName = this.ownClass + '#' + this.ownNumber
   /** @private */
@@ -46,16 +47,22 @@ export function ownInitialize (className = undefined) {
 /**
  * Unregister event handler.
  * @param {string} event
+ * @param {Object=} emitter
  * @returns {this}
  */
-export function ownOff (event) {
-  const [handler, instance, method] = this.$_Own_handlers[event]
-  instance[method](event, handler)
-  delete this.$_Own_handlers[event]
+function ownOff (event, emitter = undefined) {
+  const array = this.$_Own_handlers
+
+  for (let i = array.length; --i >= 0;) {
+    const [ev, em, fn, off] = array[i]
+    if ((event && ev !== event) || (emitter && em !== emitter)) continue
+    em[off](ev, fn)
+    array.splice(i, 1)
+  }
   return this
 }
 
-export const guessEmitterAPI = (emitter) => {
+const guessEmitterAPI = (emitter) => {
   for (const [a, b] of [['addEventListener', 'removeEventListener'], ['$on', '$off']]) {
     if (typeof emitter[a] === 'function' && typeof emitter[b] === 'function') {
       return [a, b]
@@ -71,22 +78,24 @@ export const guessEmitterAPI = (emitter) => {
  * @param {[string, string] | undefined} emitter API method names.
  * @returns {this}
  */
-export function ownOn (event, handler, emitter, methods = undefined) {
-  assert(this.$_Own_handlers[event] === undefined, 'ownOn: DUP ' + event)
-  const h = typeof handler === 'function' ? handler : this[handler]
-  assert(h, `onOwn(${event}, ${handler}): no handler`)
-  const f = (...args) => h.apply(this, args)
+function ownOn (event, handler, emitter, methods = undefined) {
   const api = methods || guessEmitterAPI(emitter)
+  let fn = handler, hn
+
+  if (typeof fn !== 'function') {
+    assert(typeof (hn = this[fn]) === 'function', `ownOn('%s', '%s') - not a function`)
+    fn = (...args) => hn.apply(this, args)
+  }
   assert(api, `onOwn('${event}'): unknown API`)
-  emitter[api[0]](event, f)
-  this.$_Own_handlers[event] = [f, emitter, api[1]]
+  emitter[api[0]](event, fn)
+  this.$_Own_handlers.push([event, emitter, fn, api[1]])
   return this
 }
 
 /**
  * Method to be called before the instance is destroyed.
  */
-export function dispose () {
+function dispose () {
   for (const key of Object.keys(this.own)) {
     const value = this.own[key]
     if (value && typeof value === 'object' &&
@@ -96,7 +105,7 @@ export function dispose () {
     delete this.own[key]
   }
 
-  for (const event of Object.keys(this.$_Own_handlers)) {
-    this.ownOff(event)
-  }
+  this.ownOff(undefined, undefined)
 }
+
+module.exports = { dispose, ownInitialize, ownOff, ownOn }
