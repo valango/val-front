@@ -1,6 +1,6 @@
 {
   "name": "val-front",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Simple front-end helpers",
   "keywords": [
     "private",
@@ -13,7 +13,7 @@
     "url": "git://github.com/valango/val-front.git"
   },
   "files": [
-    "[a-z]*.js", "debug"
+    "[a-z]*.js", "debug", "performance"
   ],
   "scripts": {
     "clean": "rimraf reports",

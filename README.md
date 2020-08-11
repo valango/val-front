@@ -8,12 +8,13 @@ $ npm i -S https://github.com/valango/val-front
 ```
 The package in intended for using with ES5+ source code. It has the following parts:
 
-* [assert](#assertions)
-* [debug](#debugging)
-* [format](#format-function)
-* [mixin](#vuejs-mixin)
-* [Own](#own-baseclass)
-* [vueName](#vuename-function)
+* [assert](#assertions) - enables debugger breakpoints for assertions;
+* [debug](#debugging) - convenience wrapper around popular 
+  [debug](https://github.com/visionmedia/debug]) package;
+* [mixin](#vuejs-mixin) - Vue.js mix-in for cleaner and safer code;
+* [Own](#own-baseclass) - ES5 base class for more maintainable code;
+* [performance](#performance) - a simple API for code profiling;
+* [vueName](#vuename-function) - get Vue.js comnponent instance name.
 
 These parts can be loaded individually, like `import dbg from 'val-front/debug'`<br />
 or together, like `import {assert, mixin} frpm 'val-front'`
@@ -77,12 +78,13 @@ This baseclass provides API for safer code and some diagnostic support as well:
    * `method dispose()   -` call this to free up all bound resources.
    Base class method cleans the _**`own`**_ container, firing _`dispose`_ method of every
    object instance having it. Then it un-registers all handlers set by _`ownOn`_ method.
-   * `function ownOff (event : string, method = '$off') : this` -
+   * `function ownOff (event : string) : this` -
    un-registers event handler previously set by `ownOn` method.
-   In most cases you don't need to call it explicitly, 
-   except for emitters not having _`$off`_ method.
-   * `function ownOn (event : string, handler, emitter, method = '$on') : this` -
-   registers _`event`_ _`handler`_ with _`emitter`_ object using _`method`_.
+   In most cases you don't need to call it explicitly.
+   * `function ownOn (event : string, handler, emitter, api=) : this` -
+   registers _`event`_ _`handler`_ with _`emitter`_ object.
+   If emitter API differs from `addEventListener/removeEventListener` or `$on/$off`,
+   then you need explicitly define api, like `['on', 'off']`.
    The _`handler`_ parameter can be instance method name or a function.
    * `property debugOn : {boolean|undefined}  -` see [debugging](#debugging) for details.
    * `property own : {Object}                 -`
@@ -93,12 +95,35 @@ This baseclass provides API for safer code and some diagnostic support as well:
    
 Mutating `debugOn` or `className` property will re-generate `debug()` instance method.
 
+### Performance
+This is a simple wrapper for Windows User Timing API. In production mode it does nothing.
+Usage example:
+```javascript
+  import {perfB, perfE, perfDump} from 'val-front/performance'
+
+  perfB('crazy-effort')   //  Create begin mark.
+  performCrazyEffort()
+  perfE('crazy-effort')   //  Create end mark and measure.
+
+  perfDump().forEach(d => console.log(d))   //  Get results
+```
+
+API methods:
+   * `perfB(name : {string})  -` create begin mark.
+   * `perfE(name : {string})  -` create end mark and measure entry. Throws exception,
+   if tag does not match any pending begin mark.
+   * `perfGet(sortBy : {string}) : {Object[]} -` returns sorted array of statistics.
+   sortBy parameter defaults to `'total'`. Each entry is an object with fields:
+      - `avg` average duration per call,
+      - `count` calls count,
+      - `max` maximum duration,
+      - `name` set via perfB/perfE,
+      - `total` total duration of all calls with this name.
+   * `perfDump(sortBy : {string}) : {string[]} -` like perfGet, returning strings.
+   * `perfReset()  -` resets measurements statistics..
+
 ### Vue.js mixin
 This mix-in will provide a Vue.js component with _**`Own`**_ class API described above.
-
-### format function
-`format( fmt, ...args ) : {string}`<br />
-is similar to Node.js format() function, but not quite reliable yet.
 
 ### vueName function
 `vueName( vm, tryHarder = false ) : {string | undefined}`<br />

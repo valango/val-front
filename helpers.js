@@ -46,14 +46,21 @@ export function ownInitialize (className = undefined) {
 /**
  * Unregister event handler.
  * @param {string} event
- * @param {string=} method for turning events off.
  * @returns {this}
  */
-export function ownOff (event, method = '$off') {
-  const [handler, instance] = this.$_Own_handlers[event]
+export function ownOff (event) {
+  const [handler, instance, method] = this.$_Own_handlers[event]
   instance[method](event, handler)
   delete this.$_Own_handlers[event]
   return this
+}
+
+export const guessEmitterAPI = (emitter) => {
+  for (const [a, b] of [['addEventListener', 'removeEventListener'], ['$on', '$off']]) {
+    if (typeof emitter[a] === 'function' && typeof emitter[b] === 'function') {
+      return [a, b]
+    }
+  }
 }
 
 /**
@@ -61,16 +68,18 @@ export function ownOff (event, method = '$off') {
  * @param {string} event
  * @param {string|function} handler or instance method name.
  * @param {Object} emitter
- * @param {string=} method for turning events on.
+ * @param {[string, string] | undefined} emitter API method names.
  * @returns {this}
  */
-export function ownOn (event, handler, emitter, method = '$on') {
+export function ownOn (event, handler, emitter, methods = undefined) {
   assert(this.$_Own_handlers[event] === undefined, 'ownOn: DUP ' + event)
   const h = typeof handler === 'function' ? handler : this[handler]
   assert(h, `onOwn(${event}, ${handler}): no handler`)
   const f = (...args) => h.apply(this, args)
-  emitter[method](event, f)
-  this.$_Own_handlers[event] = [f, emitter]
+  const api = methods || guessEmitterAPI(emitter)
+  assert(api, `onOwn('${event}'): unknown API`)
+  emitter[api[0]](event, f)
+  this.$_Own_handlers[event] = [f, emitter, api[1]]
   return this
 }
 

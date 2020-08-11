@@ -1,6 +1,6 @@
 export { default as assert } from './assert'
 export { default as debug } from './debug'
-export { default as format } from './format'
 export { default as mixin } from './mixin'
 export { default as Own } from './Own'
+export { default as performance } from './performance'
 export { default as vueName } from './vueName'
