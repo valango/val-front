@@ -1,8 +1,6 @@
 'use strict'
 process.env.NODE_ENV = 'test'
 
-const { expect } = require('chai')
-const _ = require('lodash')
 const Own = require('../Own')
 
 let on = [], off = [], a
@@ -25,10 +23,11 @@ class A extends Own {
 
 describe('Own', () => {
   it('should construct', () => {
-    expect(new A('Aa').ownName).to.equal('Aa#1')
-    expect((a = new A()).ownName).to.equal('A#2')
-    expect(a.debugOn).to.equal(undefined)
-    expect(a.debug('a')).to.equal(undefined)
+    console.log('BAA', typeof window)
+    expect(new A('Aa').ownName).toBe('Aa#1')
+    expect((a = new A()).ownName).toBe('A#2')
+    expect(a.debugOn).toBe(undefined)
+    expect(a.debug('a')).toBe(undefined)
     a.own.child = new A()
     a.own.num = 22
   })
@@ -36,40 +35,40 @@ describe('Own', () => {
   it('should register', () => {
     const fn = () => 0
     a.ownOn('ev1', 'handler', em1).ownOn('ev1', fn, em1).ownOn('ev2', fn, em1)
-    expect(on[0].ev).to.eql('ev1')
-    expect(on[0].fn).to.not.eql(fn)
-    expect(on[1].ev).to.eql('ev1')
-    expect(on[1].fn).to.eql(fn)
-    expect(on[2].ev).to.eql('ev2')
-    expect(on[2].fn).to.eql(fn)
+    expect(on[0].ev).toBe('ev1')
+    expect(on[0].fn).not.toBe(fn)
+    expect(on[1].ev).toBe('ev1')
+    expect(on[1].fn).toBe(fn)
+    expect(on[2].ev).toBe('ev2')
+    expect(on[2].fn).toBe(fn)
     on[0].fn()
-    expect(a.count).to.eql(1)
+    expect(a.count).toBe(1)
   })
 
   it('should ignore unfit un-register', () => {
     a.ownOff('evz').ownOff('ev1', a)
-    expect(off.length).to.eql(0)
+    expect(off.length).toBe(0)
   })
 
   it('should un-register selectively', () => {
     a.ownOff('ev2', em1)
-    expect(off.length).to.eql(1)
+    expect(off.length).toBe(1)
     off = []
   })
 
   it('should re-generate debug method', () => {
     let f = a.debug
     a.debugOn = false
-    expect(a.debug).to.not.equal(f)
+    expect(a.debug).not.toBe(f)
     f = a.debug
     a.ownName = 'other'
-    expect(a.ownName).to.equal('other')
-    expect(a.debug).to.not.equal(f)
+    expect(a.ownName).toBe('other')
+    expect(a.debug).not.toBe(f)
   })
 
   it('should dispose', () => {
     a.dispose()
-    expect(Object.keys(a.own).length).to.equal(0)
-    expect(off.length).to.equal(2)
+    expect(Object.keys(a.own).length).toBe(0)
+    expect(off.length).toBe(2)
   })
 })

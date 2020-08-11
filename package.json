@@ -13,7 +13,9 @@
     "url": "git://github.com/valango/val-front.git"
   },
   "files": [
-    "[a-z]*.js", "debug", "performance"
+    "[a-z]*.js",
+    "debug",
+    "performance"
   ],
   "scripts": {
     "clean": "rimraf reports",
@@ -29,7 +31,8 @@
       "index.js"
     ],
     "include": [
-      "[a-zO]*.js", "debug"
+      "[a-zO]*.js",
+      "debug"
     ],
     "reporter": [
       "lcov",
@@ -38,7 +41,10 @@
     "report-dir": "./reports"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.3.0",
     "chai": "^4.2.0",
     "codecov": "^3.7.2",
     "debug": "^4.1.1",
@@ -50,6 +56,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
     "esm": "^3.2.25",
+    "jest": "^26.3.0",
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2"
