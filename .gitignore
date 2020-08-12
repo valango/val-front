@@ -4,4 +4,3 @@
 /reports
 .nyc_output
 *.log
-yarn.lock
