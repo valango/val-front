@@ -16,8 +16,6 @@ function Own (className) {
   /** @property {string} ownName */
 }
 
-/* istanbul ignore next */
-Own.prototype.debug = () => undefined
 Own.prototype.dispose = dispose
 Own.prototype.ownOn = ownOn
 Own.prototype.ownOff = ownOff

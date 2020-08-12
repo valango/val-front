@@ -19,33 +19,18 @@
   ],
   "scripts": {
     "clean": "rimraf reports",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "coverage": "codecov",
+    "cov1": "codecov reports/lcov.info",
+    "cov2": "codecov reports/coverage-final.json",
     "lint": "eslint --ext .js",
     "purge": "rimraf node_modules reports",
-    "test": "nyc mocha 'test/**/*spec.js' --require esm"
-  },
-  "nyc": {
-    "all": true,
-    "check-coverage": true,
-    "exclude": [
-      "index.js"
-    ],
-    "include": [
-      "[a-zO]*.js",
-      "debug"
-    ],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "report-dir": "./reports"
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.3.0",
-    "chai": "^4.2.0",
     "codecov": "^3.7.2",
     "debug": "^4.1.1",
     "eslint": "^7.5.0",
@@ -55,10 +40,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
-    "esm": "^3.2.25",
     "jest": "^26.3.0",
-    "mocha": "^8.0.1",
-    "nyc": "^15.1.0",
     "rimraf": "^3.0.2"
   }
 }
