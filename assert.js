@@ -1,14 +1,13 @@
 'use strict'
+let cb, inDev = process.env.NODE_ENV
 
-const env = process.env.NODE_ENV
-
-let cb
+inDev = inDev !== 'production' && inDev !== 'test'
 
 exports = module.exports = (...args) => {
   if (args[0]) return args[0]
   if (cb) cb(args)
   // eslint-disable-next-line
-  if (env !== 'production') console.assert(...args)
+  if (inDev) console.assert(...args)
   throw new Error('AssertionError')
 }
 

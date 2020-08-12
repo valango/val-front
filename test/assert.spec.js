@@ -1,48 +1,43 @@
 'use strict'
-process.env.NODE_ENV = 'test'
-
-const load = require('./load')
-
 let data
 
 const cb = (args) => (data = args)
+const load = env => ((process.env.NODE_ENV = env) && require('../assert'))
 
-describe('assert', () => {
-  describe('normal mode', () => {
-    let assert
+describe('default mode', () => {
+  let assert
 
-    beforeAll(() => (assert = load('assert')))
+  beforeAll(() => (assert = load('test')))
 
-    it('should succeed', () => {
-      expect(assert.callback()).toBe(assert, 'callback()')
-      expect(assert(23, 'baa')).toBe(23)
-    })
-
-    it('should fire callback', () => {
-      expect(() => assert.callback(3)).toThrow('illegal')
-      expect(() => assert.callback(cb)(0, 'a')).toThrow('AssertionError')
-      expect(data).toEqual([0, 'a'], 'fail')
-      data = undefined
-      assert(1, 'B')
-      expect(data).toBe(undefined, 'success')
-      expect(() => assert.callback()(0, 55)).toThrow('AssertionError')
-      expect(data).toBe(undefined, 'nothing')
-    })
+  it('should succeed', () => {
+    expect(assert.callback()).toBe(assert)
+    expect(assert(23, 'baa')).toBe(23)
   })
 
-  describe('production mode', () => {
-    let assert
+  it('should fire callback', () => {
+    expect(() => assert.callback(3)).toThrow('illegal')
+    expect(() => assert.callback(cb)(0, 'a')).toThrow('AssertionError')
+    expect(data).toEqual([0, 'a'])
+    data = undefined
+    assert(1, 'B')
+    expect(data).toBe(undefined)
+    expect(() => assert.callback()(0, 55)).toThrow('AssertionError')
+    expect(data).toBe(undefined)
+  })
+})
 
-    beforeAll(() => (assert = load('assert', 'production')))
+describe('production mode', () => {
+  let assert
 
-    it('should succeed', () => {
-      expect(assert.callback(cb)).toBe(assert, 'callback()')
-      expect(assert(11, 'baa')).toBe(11)
-    })
+  beforeAll(() => (assert = load('production')))
 
-    it('should throw', () => {
-      expect(assert.callback(cb)).toBe(assert, 'callback()')
-      expect(() => assert()).toThrow('AssertionError')
-    })
+  it('should succeed', () => {
+    expect(assert.callback(cb)).toBe(assert)
+    expect(assert(11, 'baa')).toBe(11)
+  })
+
+  it('should throw', () => {
+    expect(assert.callback(cb)).toBe(assert)
+    expect(() => assert()).toThrow('AssertionError')
   })
 })
