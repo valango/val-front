@@ -20,8 +20,6 @@
   "scripts": {
     "clean": "rimraf reports *.log .nyc_output",
     "coverage": "codecov",
-    "cov1": "codecov reports/lcov.info",
-    "cov2": "codecov reports/coverage-final.json",
     "lint": "eslint --ext .js",
     "purge": "rimraf reports *.log .nyc_output node_modules",
     "test": "jest"
