@@ -8,7 +8,7 @@ const delay = (t) => new Promise(resolve => {
   setTimeout(resolve, t)
 })
 
-const print = str => str // process.stdout.write(str + '\n')
+const print = str => process.stdout.write(str + '\n')
 
 const tests = () => {
   it('should handle main case', async () => {

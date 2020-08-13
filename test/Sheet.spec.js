@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test'
 /* eslint quotes: 0 */
 const Sheet = require('../Sheet')
 
-const opts = { block: 2, maxCWidth: 5 }
+const opts = { block: 2, maxCWidth: 5, minWidth: 1 }
 let sheet, lines
 
 const dump = () => {

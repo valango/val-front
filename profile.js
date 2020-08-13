@@ -181,7 +181,7 @@ const profSetup = (options = undefined) => {
 }
 
 const profTexts = (sortBy = 'mean') => {
-  const sheet = new Sheet()
+  const sheet = new Sheet({ minWidth: 7 })
 
   sheet.header = ['tag', 'mean', 'count', 'total']
   profResults(sortBy).forEach((r) => {

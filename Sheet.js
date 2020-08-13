@@ -17,6 +17,7 @@ const _defaults = require('lodash.defaults')
 const DEFAULTS = {
   block: 40,
   maxCWidth: 40,
+  minWidth: 3,
   bSep: '\n',
   cSep: '  ',
   hSep: '-+'
@@ -74,9 +75,11 @@ class Sheet {
     if (this._width < 0) {
       const cc = this._colCount, w = this._widths = new Array(cc).fill(0)
       if (!cc) return []
+      const min = this._opt.minWidth
       for (const r of this._rows.concat([this.header || []])) {
         typeof r !== 'string' && r.forEach((v, i) => (w[i] = Math.max(v.length, w[i])))
       }
+      w.forEach((v, i) => (v < min && (w[i] = min)))
       this._width = w.reduce((a, v) => a + v) + (cc - 1) * this._opt.cSep.length
     }
     return this._widths.slice()
