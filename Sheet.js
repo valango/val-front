@@ -115,8 +115,6 @@ class Sheet {
       let l, s = v === undefined ? '' : (v + '').trim()
       if ((l = s.length) > mw) {
         s = (s.substr(0, a) + '...' + s.substr(l - a)).substr(0, mw)
-      } else if (col) {
-        s = s.padStart(mw)
       }
       return s
     })
@@ -156,7 +154,7 @@ class Sheet {
   makeLine (values, filler = ' ', sep = this._opt.cSep) {
     const w = this.columnWidths
     return typeof values === 'string' ? values
-      : values.map((c, j) => c.padEnd(w[j], filler)).join(sep)
+      : values.map((c, j) => j ? c.padStart(w[j], filler) : c.padEnd(w[j], filler)).join(sep)
   }
 }
 
