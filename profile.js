@@ -9,24 +9,26 @@ const assert = (cond, msg) => {
   if (!cond) throw new Error('prof' + msg)
 }
 
-let getTime, timeScale, T0
+let getTime, timeScale, T0, step
 
 let isEnabled = process.env.NODE_ENV !== 'production'
-let measures = [], pending = [], threads = [], threadAcc = []
+let measures = [], pending = [], threads = []
 
 function Measure (tag) {
   this.entries = []
+  this.n = T0
   this.tag = tag
 }
 
 Measure.prototype.add = function (time, path) {
   this.entries.push(path ? [time, path.join('>')] : [time])
+  this.n += step
   return this
 }
 
 /** @returns {number} */
 Measure.prototype.count = function () {
-  return this.entries.length
+  return this.n
 }
 
 /** @returns {Object} */
@@ -40,6 +42,10 @@ Measure.prototype.leaks = function () {
   return { ...dict, count }
 }
 
+Measure.prototype.mean = function () {
+  return this.total() / this.count()
+}
+
 /** @returns {BigInt|number} */
 Measure.prototype.total = function () {
   return this.entries.reduce((a, r) => a + r[0], T0) / timeScale
@@ -48,12 +54,21 @@ Measure.prototype.total = function () {
 function ThreadAcc (tag) {
   this.tag = tag
   this.t = T0
+  this.n = T0
 }
 
-ThreadAcc.prototype.count = () => 1
+ThreadAcc.prototype.count = function () {
+  return this.n
+}
+
 ThreadAcc.prototype.leaks = () => ({ count: 0 })
+
 ThreadAcc.prototype.total = function () {
-  return this.t
+  return this.t / timeScale
+}
+
+ThreadAcc.prototype.mean = function () {
+  return this.total() / this.n
 }
 
 /** @returns {Measure} */
@@ -87,6 +102,7 @@ const profThreadEnd = (tag, id) => {
   console.log('TDEL', name)
   threads.splice(foundIndex, 1)
   acc.t += getTime() - r.t0
+  acc.n += step
   return true
 }
 
@@ -159,13 +175,14 @@ const profSetup = (options = undefined) => {
     const big = typeof getTime() !== 'number'
     timeScale = options.timeScale || (big ? BigInt(1e3) : 1)
     T0 = big ? 0n : 0
+    step = big ? 1n : 1
   }
   return old
 }
 
-const profTexts = (sortBy = 'total') => {
+const profTexts = (sortBy = 'mean') => {
   return profResults(sortBy).map((r) => {
-    let l = r.leaks(), str = r.tag + ': T=' + r.total() + ' N=' + r.count()
+    let l = r.leaks(), str = r.tag + ': M=' + r.mean() + ' N=' + r.count() + ' T=' + r.total()
 
     if (l.count) {
       delete l.count
