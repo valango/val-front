@@ -1,7 +1,7 @@
 'use strict'
 process.env.NODE_ENV = 'test'
 
-const { timBegin, timDepth, timEnd, timOn, timReset, timResults, timSetup, timTexts } = require(
+const { profBegin, profDepth, profEnd, profOn, profReset, profResults, profSetup, profTexts } = require(
   '../profile')
 
 const delay = (t) => new Promise(resolve => {
@@ -10,57 +10,57 @@ const delay = (t) => new Promise(resolve => {
 
 const tests = () => {
   it('should handle main case', async () => {
-    expect(Object.keys(timSetup())).toEqual(['getTime', 'timeScale'])
-    expect(timOn()).toBe(true)
-    expect(timOn(true)).toBe(true)
-    expect(timBegin('a') && timBegin('b')).toBe(2)
-    expect(timEnd('b') && timBegin('b')).toBe(2)
+    expect(Object.keys(profSetup())).toEqual(['getTime', 'timeScale'])
+    expect(profOn()).toBe(true)
+    expect(profOn(true)).toBe(true)
+    expect(profBegin('a') && profBegin('b')).toBe(2)
+    expect(profEnd('b') && profBegin('b')).toBe(2)
     await delay(10)
-    timEnd('b')
+    profEnd('b')
     await delay(5)
-    timEnd('a')
-    expect(timDepth()).toBe(0)
-    expect(timTexts().length).toBe(2)
-    // console.log(timTexts())
+    profEnd('a')
+    expect(profDepth()).toBe(0)
+    expect(profTexts().length).toBe(2)
+    // console.log(profTexts())
   })
 
   it('should reset', () => {
-    timReset(/^a/)
-    expect(timResults('count').length).toBe(1)
-    timReset()
-    expect(timResults().length).toBe(0)
+    profReset(/^a/)
+    expect(profResults('count').length).toBe(1)
+    profReset()
+    expect(profResults().length).toBe(0)
   })
 
   it('should switch off', () => {
-    expect(timOn(false)).toBe(true)
-    expect(timBegin('a') && timBegin('a') && timBegin('b')).toBe(true)
-    expect(timEnd('a')).toBe(true)
-    expect(timResults().length).toBe(0)
-    expect(timOn(true)).toBe(false)
+    expect(profOn(false)).toBe(true)
+    expect(profBegin('a') && profBegin('a') && profBegin('b')).toBe(true)
+    expect(profEnd('a')).toBe(true)
+    expect(profResults().length).toBe(0)
+    expect(profOn(true)).toBe(false)
   })
 
   it('should throw on errors', () => {
-    expect(() => timBegin([])).toThrow('invalid tag')
-    expect(() => timBegin()).toThrow('invalid tag')
-    timBegin('a')
-    expect(() => timOn(false)).toThrow('pending')
+    expect(() => profBegin([])).toThrow('invalid tag')
+    expect(() => profBegin()).toThrow('invalid tag')
+    profBegin('a')
+    expect(() => profOn(false)).toThrow('pending')
   })
 
   it('should be clever', () => {
-    timReset()
-    timBegin('a') && timBegin('b') && timBegin('c')
-    timEnd('a')
-    expect(timResults()[0].leaks().count).toBe(2)
-    expect(timTexts().length).toBe(1)
-    // timTexts().forEach(r => console.log(r))
-    timReset()
+    profReset()
+    profBegin('a') && profBegin('b') && profBegin('c')
+    profEnd('a')
+    expect(profResults()[0].leaks().count).toBe(2)
+    expect(profTexts().length).toBe(1)
+    // profTexts().forEach(r => console.log(r))
+    profReset()
   })
 }
 
 describe('back-end mode', tests)
 
 describe('front-end mode', () => {
-  beforeAll(() => timSetup({ getTime: Date.now }))
+  beforeAll(() => profSetup({ getTime: Date.now }))
 
   tests()
 })

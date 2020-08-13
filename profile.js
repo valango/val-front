@@ -6,7 +6,7 @@
 /* global BigInt: false */
 
 const assert = (cond, msg) => {
-  if (!cond) throw new Error('profile.tim' + msg)
+  if (!cond) throw new Error('prof' + msg)
 }
 
 let getTime, timeScale, T0
@@ -59,7 +59,7 @@ const getPathTo = (j) => {
   return pending.slice(0, j + 1).map(({ tag }) => tag)
 }
 
-const timBegin = (tag) => {
+const profBegin = (tag) => {
   if (!isEnabled) return true
   assert(tag && typeof tag === 'string' && tag.indexOf('>') < 0, 'Begin(): invalid tag')
   const r = findByTag(tag, pending)
@@ -67,7 +67,7 @@ const timBegin = (tag) => {
   return pending.push({ tag, t0: getTime() })
 }
 
-const timEnd = (tag) => {
+const profEnd = (tag) => {
   if (isEnabled) {
     const i = pending.length - 1, t1 = getTime()
     assert(i >= 0, 'End(' + tag + '): nothing to end')
@@ -85,7 +85,7 @@ const timEnd = (tag) => {
   return true
 }
 
-const timReset = (rx = undefined) => {
+const profReset = (rx = undefined) => {
   if (isEnabled) {
     if (rx) {
       for (let i = measures.length; --i >= 0;) {
@@ -99,9 +99,9 @@ const timReset = (rx = undefined) => {
   return true
 }
 
-const timDepth = () => pending.length
+const profDepth = () => pending.length
 
-const timResults = (sortBy = 'total') => {
+const profResults = (sortBy = 'total') => {
   if (!isEnabled) return []
   return measures.slice().sort((a, b) => {
     const v = b[sortBy]() - a[sortBy]()
@@ -110,7 +110,7 @@ const timResults = (sortBy = 'total') => {
   })
 }
 
-const timSetup = (options = undefined) => {
+const profSetup = (options = undefined) => {
   const old = { getTime, timeScale }
 
   if (options) {
@@ -123,8 +123,8 @@ const timSetup = (options = undefined) => {
   return old
 }
 
-const timTexts = (sortBy = 'total') => {
-  return timResults(sortBy).map((r) => {
+const profTexts = (sortBy = 'total') => {
+  return profResults(sortBy).map((r) => {
     let l = r.leaks(), str = r.tag + ': T=' + r.total() + ' N=' + r.count()
 
     if (l.count) {
@@ -135,26 +135,26 @@ const timTexts = (sortBy = 'total') => {
   })
 }
 
-const timOn = (yes = undefined) => {
+const profOn = (yes = undefined) => {
   const old = isEnabled
   if (yes !== undefined) {
-    if (!yes && pending.length) throw new Error('timOn(false) with pending measures')
+    assert(yes || !pending.length, 'On(false) with pending measures')
     isEnabled = yes
   }
   return old
 }
 
-timSetup({
+profSetup({
   getTime: (process && process.hrtime && process.hrtime.bigint) || Date.now
 })
 
 exports = module.exports = {
-  timBegin,
-  timDepth,
-  timEnd,
-  timOn,
-  timReset,
-  timResults,
-  timSetup,
-  timTexts
+  profBegin,
+  profDepth,
+  profEnd,
+  profOn,
+  profReset,
+  profResults,
+  profSetup,
+  profTexts
 }
