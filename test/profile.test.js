@@ -46,14 +46,24 @@ const tests = () => {
     expect(() => profOn(false)).toThrow('pending')
   })
 
-  it('should be clever', () => {
+  it('should handle leaks', () => {
     profReset()
     profBegin('a') && profBegin('b') && profBegin('c')
     profEnd('a')
     expect(profResults()[0].leaks().count).toBe(2)
     expect(profTexts().length).toBe(1)
     // profTexts().forEach(r => console.log(r))
+    profReset()   //  Here to clear measures.
+  })
+
+  it('should handle total leak', () => {
     profReset()
+    profBegin('a') && profBegin('b') && profBegin('c')
+    profEnd(true)
+    expect(profResults()[0].leaks().count).toBe(3)
+    expect(profTexts().length).toBe(1)
+    // profTexts().forEach(r => console.log(r))
+    profReset()   //  Here to clear measures.
   })
 }
 

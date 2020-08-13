@@ -70,13 +70,14 @@ const profBegin = (tag) => {
 const profEnd = (tag) => {
   if (isEnabled) {
     const i = pending.length - 1, t1 = getTime()
+    let j = 0, r = pending[0]
     assert(i >= 0, 'End(' + tag + '): nothing to end')
 
-    const r = findByTag(tag, pending), j = foundIndex
+    if (tag !== true) r = findByTag(tag, pending), j = foundIndex
     assert(r, 'End(' + tag + '): no such entry')
     //  If we weren't at the last entry, then terminate those, too.
     for (let i = pending.length; --i >= j;) {
-      const path = i > j && getPathTo(i)
+      const path = (tag === true || i > j) && getPathTo(i)
       const { t0 } = pending.pop()
       const measure = findByTag(tag, measures) || newMeasure(tag)
       measure.add(t1 - t0, path)
