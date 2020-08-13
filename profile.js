@@ -93,7 +93,6 @@ const profThreadBegin = (tag, id) => {
   const name = tag + '#' + id, tg = '>' + tag
   assert(!findByTag(name, threads), 'ThreadBegin(' + name + '): doubled')
   if (!findByTag(tg, measures)) measures.push(new ThreadAcc(tg))
-  console.log('TPUSH', name)
   threads.push({ tag: name, t0: getTime() })
   return true
 }
@@ -101,7 +100,6 @@ const profThreadBegin = (tag, id) => {
 const profThreadEnd = (tag, id) => {
   const acc = findByTag('>' + tag, measures), name = tag + '#' + id, r = findByTag(name, threads)
   assert(r, 'ThreadEnd(' + name + '): no thread')
-  console.log('TDEL', name)
   threads.splice(foundIndex, 1)
   acc.t += getTime() - r.t0
   acc.n += step

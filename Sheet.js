@@ -111,10 +111,12 @@ class Sheet {
    */
   append (values) {
     const mw = this._opt.maxCWidth, a = Math.floor(mw / 2) - 1
-    const row = typeof values === 'string' ? values : values.map(v => {
+    const row = typeof values === 'string' ? values : values.map((v, col) => {
       let l, s = v === undefined ? '' : (v + '').trim()
       if ((l = s.length) > mw) {
         s = (s.substr(0, a) + '...' + s.substr(l - a)).substr(0, mw)
+      } else if (col) {
+        s = s.padStart(mw)
       }
       return s
     })
@@ -138,7 +140,7 @@ class Sheet {
   dump () {
     const lines = []
 
-    for(const l of this){
+    for (const l of this) {
       lines.push(l)
     }
     return lines
