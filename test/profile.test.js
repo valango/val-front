@@ -8,6 +8,8 @@ const delay = (t) => new Promise(resolve => {
   setTimeout(resolve, t)
 })
 
+const print = str => str // process.stdout.write(str + '\n')
+
 const tests = () => {
   it('should handle main case', async () => {
     expect(Object.keys(profSetup())).toEqual(['getTime', 'timeScale'])
@@ -23,8 +25,8 @@ const tests = () => {
     profEnd('fun', 1)
     profEnd('a')
     expect(profDepth()).toBe(0)
+    profTexts().forEach(r => print(r))
     expect(profTexts().length).toBe(3)
-    console.log('profTexts', profTexts())
   })
 
   it('should reset', () => {
@@ -54,8 +56,8 @@ const tests = () => {
     profBegin('a') && profBegin('b') && profBegin('c')
     profEnd('a')
     expect(profResults()[0].leaks().count).toBe(2)
-    expect(profTexts().length).toBe(1)
-    // profTexts().forEach(r => console.log(r))
+    profTexts().forEach(r => print(r))
+    expect(profTexts().length).toBe(3)
     profReset()   //  Here to clear measures.
   })
 
@@ -64,8 +66,8 @@ const tests = () => {
     profBegin('a') && profBegin('b') && profBegin('c')
     profEnd(true)
     expect(profResults()[0].leaks().count).toBe(3)
-    expect(profTexts().length).toBe(1)
-    // profTexts().forEach(r => console.log(r))
+    profTexts().forEach(r => print(r))
+    expect(profTexts().length).toBe(4)
     profReset()   //  Here to clear measures.
   })
 }

@@ -5,6 +5,8 @@
 'use strict'
 /* global BigInt: false */
 
+const Sheet = require('./Sheet')
+
 const assert = (cond, msg) => {
   if (!cond) throw new Error('prof' + msg)
 }
@@ -181,15 +183,19 @@ const profSetup = (options = undefined) => {
 }
 
 const profTexts = (sortBy = 'mean') => {
-  return profResults(sortBy).map((r) => {
-    let l = r.leaks(), str = r.tag + ': M=' + r.mean() + ' N=' + r.count() + ' T=' + r.total()
+  const sheet = new Sheet()
 
+  sheet.header = ['tag', 'mean', 'count', 'total']
+  profResults(sortBy).forEach((r) => {
+    let l = r.leaks()
+
+    sheet.append([r.tag, r.mean(), r.count(), r.total()])
     if (l.count) {
       delete l.count
-      str += Object.keys(l).map(k => '\n  LEAK: ' + k + ': ' + l[k]).join('')
+      Object.keys(l).forEach(k => sheet.append('  LEAK: ' + k + ': ' + l[k]))
     }
-    return str
   })
+  return sheet.dump()
 }
 
 const profOn = (yes = undefined) => {

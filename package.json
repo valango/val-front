@@ -40,5 +40,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "jest": "^26.3.0",
     "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "lodash.defaults": "^4.2.0"
   }
 }
