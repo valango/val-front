@@ -11,7 +11,8 @@ const assert = (cond, msg) => {
 
 let getTime, timeScale, T0
 
-let isEnabled = process.env.NODE_ENV !== 'production', measures = [], pending = []
+let isEnabled = process.env.NODE_ENV !== 'production'
+let measures = [], pending = [], threads = [], threadAcc = []
 
 function Measure (tag) {
   this.entries = []
@@ -44,6 +45,17 @@ Measure.prototype.total = function () {
   return this.entries.reduce((a, r) => a + r[0], T0) / timeScale
 }
 
+function ThreadAcc (tag) {
+  this.tag = tag
+  this.t = T0
+}
+
+ThreadAcc.prototype.count = () => 1
+ThreadAcc.prototype.leaks = () => ({ count: 0 })
+ThreadAcc.prototype.total = function () {
+  return this.t
+}
+
 /** @returns {Measure} */
 const newMeasure = (tag) => {
   const r = new Measure(tag)
@@ -59,22 +71,46 @@ const getPathTo = (j) => {
   return pending.slice(0, j + 1).map(({ tag }) => tag)
 }
 
-const profBegin = (tag) => {
+const profThreadBegin = (tag, id) => {
+  assert(tag && typeof tag === 'string' && tag.indexOf('#') < 0, 'Thread(): invalid tag')
+  const name = tag + '#' + id, tg = '>' + tag
+  assert(!findByTag(name, threads), 'ThreadBegin(' + name + '): doubled')
+  if (!findByTag(tg, measures)) measures.push(new ThreadAcc(tg))
+  console.log('TPUSH', name)
+  threads.push({ tag: name, t0: getTime() })
+  return true
+}
+
+const profThreadEnd = (tag, id) => {
+  const acc = findByTag('>' + tag, measures), name = tag + '#' + id, r = findByTag(name, threads)
+  assert(r, 'ThreadEnd(' + name + '): no thread')
+  console.log('TDEL', name)
+  threads.splice(foundIndex, 1)
+  acc.t += getTime() - r.t0
+  return true
+}
+
+const profBegin = (tag, id = undefined) => {
   if (!isEnabled) return true
+  if (id !== undefined) return profThreadBegin(tag, id)
   assert(tag && typeof tag === 'string' && tag.indexOf('>') < 0, 'Begin(): invalid tag')
   const r = findByTag(tag, pending)
   assert(!r, 'Begin(' + tag + '): tag is still open')
   return pending.push({ tag, t0: getTime() })
 }
 
-const profEnd = (tag) => {
+const profEnd = (tag, id = undefined) => {
   if (isEnabled) {
+    if (id !== undefined) return profThreadEnd(tag, id)
     const t1 = getTime()
     let j = 0, r = pending[0]
     assert(pending.length || tag === true, 'End(' + tag + '): nothing to end')
 
-    if (tag !== true) {
-      r = findByTag(tag, pending), j = foundIndex
+    if (tag === true) {
+      threads = []
+    } else {
+      r = findByTag(tag, pending)
+      j = foundIndex
       assert(r, 'End(' + tag + '): no such entry')
     }
     //  If we weren't at the last entry, then terminate those, too.
@@ -117,7 +153,8 @@ const profSetup = (options = undefined) => {
   const old = { getTime, timeScale }
 
   if (options) {
-    assert(pending.length === 0 && measures.length === 0, 'Setup() while operating')
+    assert(pending.length === 0 && measures.length === 0 && threads.length === 0,
+      'Setup() while operating')
     if (options.getTime) getTime = options.getTime
     const big = typeof getTime() !== 'number'
     timeScale = options.timeScale || (big ? BigInt(1e3) : 1)
@@ -141,7 +178,7 @@ const profTexts = (sortBy = 'total') => {
 const profOn = (yes = undefined) => {
   const old = isEnabled
   if (yes !== undefined) {
-    assert(yes || !pending.length, 'On(false) with pending measures')
+    assert(yes || !(pending.length || threads.length), 'On(false) in pending state')
     isEnabled = yes
   }
   return old
