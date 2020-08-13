@@ -12,6 +12,7 @@ const tests = () => {
   it('should handle main case', async () => {
     expect(Object.keys(profSetup())).toEqual(['getTime', 'timeScale'])
     expect(profOn()).toBe(true)
+    profEnd(true)     //  Should not throw.
     expect(profOn(true)).toBe(true)
     expect(profBegin('a') && profBegin('b')).toBe(2)
     expect(profEnd('b') && profBegin('b')).toBe(2)
