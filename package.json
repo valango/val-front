@@ -20,9 +20,7 @@
   "scripts": {
     "clean": "rimraf reports *.log .nyc_output",
     "coverage": "codecov",
-    "postinstall": "echo POSTINSTALL",
-    "install": "echo INST",
-    "update": "echo UPDATE",
+    "postinstall": "rm *.config.js",
     "lint": "eslint --ext .js",
     "purge": "rimraf reports *.log .nyc_output node_modules",
     "test": "jest"
