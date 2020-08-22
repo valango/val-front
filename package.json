@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
+    "@vue/test-utils": "^1.0.4",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.3.0",
     "codecov": "^3.7.2",
@@ -39,7 +40,9 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
     "jest": "^26.3.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.6.12"
   },
   "dependencies": {
     "lodash.defaults": "^4.2.0"

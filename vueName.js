@@ -1,3 +1,4 @@
+'use strict'
 //  See: https://github.com/vuejs/Discussion/issues/7
 
 /**
@@ -8,12 +9,13 @@
  * @param {boolean=} any -- to default to component tag or file name.
  * @returns {string | undefined}
  */
-export default (vm, any = false) => {
-  if (vm.$root === vm) return '#root#'
+module.exports = (vm, any = false) => {
+  const o = vm._isVue && vm.$options
+  let name = vm.name || (o && o.name)
 
-  const o = vm._isVue && vm.$options, name = vm.name || (o && o.name)
+  if (name) return name
 
-  if (name || !(any && o)) return name
+  name = any && o && (o._componentTag || (o.__file && '@' + o.__file))
 
-  return o._componentTag || (o.__file && '@' + o.__file) || undefined
+  return name || (vm.$root === vm && '#root#') || undefined
 }
