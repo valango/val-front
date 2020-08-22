@@ -209,27 +209,6 @@ profSetup({
   getTime: (process && process.hrtime && process.hrtime.bigint) || Date.now
 })
 
-let fnSeed = 0
-
-const profWrap = (fn, name) => {
-  if (!isEnabled) return fn
-
-  const n = name || fn.name || ('fn#' + (++fnSeed))
-
-  return (...args) => {
-    let res
-    profBeg(n)
-    try {
-      res = fn.apply(this, args)
-    } catch (e) {
-      profEnd(n)
-      throw e
-    }
-    profEnd(n)
-    return res
-  }
-}
-
 exports = module.exports = {
   profBegin,
   profDepth,
@@ -238,6 +217,5 @@ exports = module.exports = {
   profReset,
   profResults,
   profSetup,
-  profTexts,
-  profWrap
+  profTexts
 }

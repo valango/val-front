@@ -1,6 +1,4 @@
 'use strict'
-process.env.NODE_ENV = 'test'
-
 const { profBegin, profDepth, profEnd, profOn, profReset, profResults, profSetup, profTexts } = require(
   '../profile')
 
@@ -8,7 +6,8 @@ const delay = (t) => new Promise(resolve => {
   setTimeout(resolve, t)
 })
 
-const print = str => process.stdout.write(str + '\n')
+const print = ()=>undefined
+// const print = str => process.stdout.write(str + '\n')
 
 const tests = () => {
   it('should handle main case', async () => {

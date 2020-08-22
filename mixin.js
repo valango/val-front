@@ -1,7 +1,8 @@
-import { dispose, ownInitialize, ownOn, ownOff } from './helpers'
-import vueName from './vueName'
+'use strict'
+const { dispose, ownInitialize, ownOn, ownOff } = require('./helpers')
+const vueName = require('./vueName')
 
-export default {
+module.exports = {
   beforeCreate () {
     //  Override beforeCreate() hook or modify things in later lifecycle hooks.
     ownInitialize.call(this, vueName(this, true))

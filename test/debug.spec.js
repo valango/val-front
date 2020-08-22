@@ -40,7 +40,6 @@ describe('default mode', () => {
 describe('production mode', () => {
   beforeAll(() => init('production'))
   it('should do nothing', () => {
-    // console.log(Object.keys(require.cache))
     const debug = target('TEST', true)
     expect(target.enabled).toBe(undefined)
     debug('uraa')

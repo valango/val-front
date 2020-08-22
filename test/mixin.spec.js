@@ -1,15 +1,22 @@
 'use strict'
-process.env.NODE_ENV = 'test'
-
 const { mount } = require('@vue/test-utils')
 const mixin = require('../mixin')
 
+let disposed, wrapper
+
 const Comp = {
-  mixins: [mixin]
+  mixins: [mixin],
+  template: '<div></div>',
+  methods: { dispose: () => (disposed = true) }
 }
 
-test('should load', () => {
-  const w = mount(Comp)
-  console.log(w.vm)
-  // expect(w.vm.ownName).toBe('joru')
+test('should name', () => {
+  wrapper = mount(Comp)
+  expect(wrapper.vm.ownName).toBe('VueComponent#1')
+})
+
+test('should dispose', () => {
+  expect(disposed).toBe(undefined)
+  wrapper.destroy()
+  expect(disposed).toBe(true)
 })

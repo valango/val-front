@@ -1,6 +1,4 @@
 'use strict'
-process.env.NODE_ENV = 'test'
-
 const vueName = require('../vueName')
 const { mount } = require('@vue/test-utils')
 const Vue = require('vue')
@@ -17,10 +15,7 @@ test('root', () => {
   expect(vueName(vm)).toBe('#root#')
 })
 
-
 test('deep search', () => {
   const { vm } = mount(Comp)
-  // console.log('OPTS', vm.$options)
-  console.log('ROOT', vm.$root === vm)
-  expect(vueName(vm, true)).toBe('#root#')
+  expect(vueName(vm, true)).toBe(undefined)
 })

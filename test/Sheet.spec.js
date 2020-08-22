@@ -1,5 +1,4 @@
 'use strict'
-process.env.NODE_ENV = 'test'
 /* eslint quotes: 0 */
 const Sheet = require('../Sheet')
 

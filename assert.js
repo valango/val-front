@@ -6,6 +6,7 @@ inDev = inDev !== 'production' && inDev !== 'test'
 exports = module.exports = (...args) => {
   if (args[0]) return args[0]
   if (cb) cb(args)
+  /* istanbul ignore next */
   // eslint-disable-next-line
   if (inDev) console.assert(...args)
   throw new Error('AssertionError')

@@ -1,6 +1,4 @@
 'use strict'
-process.env.NODE_ENV = 'test'
-
 const Own = require('../Own')
 
 let on = [], off = [], a
