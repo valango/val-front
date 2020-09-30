@@ -20,7 +20,6 @@
   "scripts": {
     "clean": "rimraf reports *.log yarn.lock",
     "coverage": "codecov",
-    "postinstall": "rm *.config.js",
     "lint": "eslint --ext .js",
     "purge": "rimraf reports *.log yarn.lock node_modules",
     "test": "jest"

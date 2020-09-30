@@ -4,8 +4,6 @@
  */
 'use strict'
 
-const _defaults = require('lodash.defaults')
-
 /** @typedef TSheetOptions {Object}
  * @property {number} block     - Number of rows between headers (40).
  * @property {number} maxCWidth - Maximum column width (40).
@@ -34,10 +32,10 @@ class Sheet {
    *  {string} cSep      - Column separator ('  ').
    *  {string} hSep      - Line under the `header` ('-+') - must match cSep, if not empty!
    */
-  constructor (options = undefined) {
+  constructor (options = {}) {
     this._colCount = 0
     this._header = null
-    this._opt = _defaults({}, options || {}, DEFAULTS)
+    this._opt = {...DEFAULTS, ...options}
     this._rows = []
     this._width = 0
     /**
