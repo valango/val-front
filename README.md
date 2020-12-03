@@ -2,10 +2,9 @@
 
 Simple code snippets for making front-end coding more fun.
 
-## Usage
-```
-$ npm i -S https://github.com/valango/val-front
-```
+Note: this project is just a collection of sketches. Published packages
+`vue-proper` and `assert-fine` both emerged from here.
+
 The package in intended for using with ES5+ source code. It has the following parts:
 
 * [assert](#assertions) - enables debugger breakpoints for assertions;
